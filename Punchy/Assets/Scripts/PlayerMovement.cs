@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        //get our rigidbody so we can apply a force
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -25,14 +26,17 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //horizontal movement input (A, D keys)
+        //don't need this if we are just pushing the character forward
+        //horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
-        horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
-
+        //if the space bar is press jump on the next fixed update Move()
         if (Input.GetButtonDown("Jump"))
         {
             jump = true;
         }
 
+        //Crouch controls
         if (Input.GetButtonDown("Crouch"))
         {
             crouch = true;
@@ -42,6 +46,9 @@ public class PlayerMovement : MonoBehaviour
             crouch = false;
         }
 
+        //push our player forward
+        //TODO move this to the character controller
+        //     and only addForce if the player is grounded
         rb.AddForce(new Vector2(runSpeed, y));
 
     }
@@ -49,8 +56,10 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         // Move our character
-
+        //TODO redo the Move() method, we dont need to use horizontalMove controls
         controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
+
+        //reset jump
         jump = false;
     }
 }
